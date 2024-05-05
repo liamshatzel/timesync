@@ -36,8 +36,9 @@ def add_total_time():
     max_time = db.execute('SELECT max_time FROM counter')
     if(user_time > max_time.fetchone()[0]):
         db.execute('UPDATE counter SET max_time = ?', (user_time,))
-
+    #print(max_time.fetchone()[0])
     db.commit()
+    return _create_response("total_time: " + str(tot_time))
 
 @app.route("/max-time")
 def get_max_time():
@@ -48,9 +49,6 @@ def get_max_time():
 
 def _create_response(data):
     response = make_response(jsonify(data))
-    #response.headers.add("Access-Control-Allow-Origin", "*")
-    #response.headers.add("Access-Control-Allow-Headers", "*")
-    #response.headers.add("Access-Control-Allow-Methods", "*")
     return response
 
 def get_db():

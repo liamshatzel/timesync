@@ -51,7 +51,7 @@ export class AppComponent {
 
   sendTimeToBackend() {
     // Send the time to the backend
-    const payload = { time: this.time };
+    const payload = { "time": this.time };
 
     this.dataService.sendTime(payload).subscribe({
       complete: () => console.log('Time sent successfully'),
