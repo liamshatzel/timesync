@@ -13,4 +13,8 @@ export class DataService {
     return this.http.get('https://localhost:3000/num-visitors');
   }
 
+  sendTime(payload: any): Observable<any> {
+    return this.http.post('https://localhost:3000/update-time', payload);
+  }
+
 }
