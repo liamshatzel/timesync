@@ -8,13 +8,16 @@ DATABASE = './storage.db'
 
 
 ### DATABASE FUNCTIONS ###
-@app.route("/")
-def hello_world():
-    return ""
-
 @app.route("/num-visitors")
 def num_visitors():
-    return "Hello, World!"
+    db = get_db()
+    cur_visitors = db.execute('SELECT num_visit FROM counter')
+    num_visitors = cur_visitors.fetchone()[0] + 1
+    db.execute('UPDATE counter SET num_visit = ?', (num_visitors,))
+    db.commit()
+
+    return str(num_visitors)
+
 
 def get_db():
     db = getattr(g, '_database', None)
