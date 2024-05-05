@@ -1,1 +1,1 @@
-# timesync
+# timesyncAI
