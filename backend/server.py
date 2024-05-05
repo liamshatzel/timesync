@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Flask, g, current_app
+from flask import Flask, g, current_app, jsonify, request
 import click
 from flask.cli import with_appcontext
 
@@ -18,6 +18,29 @@ def num_visitors():
 
     return str(num_visitors)
 
+@app.route("/update-time", methods=["POST"])
+#add total time to database
+def add_total_time():
+    db = get_db()
+    data = request.get_json()
+    user_time = int(data['time'])
+
+    cur_total_time = db.execute('SELECT tot_time FROM counter')
+
+    tot_time = cur_total_time.fetchone()[0] + user_time
+    db.execute('UPDATE counter SET tot_time = ?', (tot_time,))
+
+    max_time = db.execute('SELECT max_time FROM counter')
+    if(user_time > max_time.fetchone()[0]):
+        db.execute('UPDATE counter SET max_time = ?', (user_time,))
+
+    db.commit()
+@app.route("/get-max-time")
+def get_max_time():
+    db = get_db()
+    cur_max_time = db.execute('SELECT max_time FROM counter')
+    max_time = cur_max_time.fetchone()[0]
+    return str(max_time)
 
 def get_db():
     db = getattr(g, '_database', None)
