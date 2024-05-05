@@ -10,13 +10,14 @@
 <body class="noisy">
 <main class="main">
   <div class="totalvisit">
+    <button (click)="fetchData()">Click Me</button>
     <p>Total views: {{ totViews }} views</p>
   </div>
   <div class="tottime">
     <p>Current session: {{ time }}mins</p>
   </div>
   <div class="maxtime">
-    <p>Longest session: 0 mins</p>
+    <p>Longest session: {{ maxTime }} mins</p>
   </div>
 </main>
 </body>

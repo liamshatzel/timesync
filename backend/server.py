@@ -1,10 +1,13 @@
 import sqlite3
-from flask import Flask, g, current_app, jsonify, request
+from flask import Flask, g, current_app, jsonify, request, make_response
+from flask_cors import CORS, cross_origin
 import click
 from flask.cli import with_appcontext
 
 app = Flask(__name__)
 DATABASE = './storage.db'
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 ### DATABASE FUNCTIONS ###
@@ -16,7 +19,7 @@ def num_visitors():
     db.execute('UPDATE counter SET num_visit = ?', (num_visitors,))
     db.commit()
 
-    return str(num_visitors)
+    return _create_response("num_visitors: " + str(num_visitors)) 
 
 @app.route("/update-time", methods=["POST"])
 #add total time to database
@@ -35,12 +38,20 @@ def add_total_time():
         db.execute('UPDATE counter SET max_time = ?', (user_time,))
 
     db.commit()
-@app.route("/get-max-time")
+
+@app.route("/max-time")
 def get_max_time():
     db = get_db()
     cur_max_time = db.execute('SELECT max_time FROM counter')
     max_time = cur_max_time.fetchone()[0]
-    return str(max_time)
+    return _create_response("max_time: " + str(max_time))
+
+def _create_response(data):
+    response = make_response(jsonify(data))
+    #response.headers.add("Access-Control-Allow-Origin", "*")
+    #response.headers.add("Access-Control-Allow-Headers", "*")
+    #response.headers.add("Access-Control-Allow-Methods", "*")
+    return response
 
 def get_db():
     db = getattr(g, '_database', None)
