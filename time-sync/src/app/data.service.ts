@@ -10,7 +10,7 @@ export class DataService {
   constructor(private http: HttpClient) { }
 
   getValues(): Observable<any> {
-    return this.http.get('http://localhost:3000/num-visitors');
+    return this.http.get('https://localhost:3000/num-visitors');
   }
 
 }
