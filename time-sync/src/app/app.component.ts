@@ -29,10 +29,29 @@ export class AppComponent {
     });
   }
 
+
+
   ngOnInit() {
     this.fetchData();
     this.curTime.subscribe((data) => {
       this.time = data;
+    });
+    window.addEventListener('beforeunload', this.sendTimeToBackend);
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe from the data service
+    window.removeEventListener('beforeunload', this.sendTimeToBackend);
+  }
+
+
+  sendTimeToBackend() {
+    // Send the time to the backend
+    const payload = { time: this.time };
+
+    this.dataService.sendTime(payload).subscribe({
+      complete: () => console.log('Time sent successfully'),
+      error: (err: any) => console.error('Error sending time', err),
     });
   }
 }
