@@ -22,7 +22,7 @@ export class AppComponent {
   time = 0;
   constructor(private dataService: DataService) {} // Inject DataService instead of HttpClient
   fetchData() {
-    this.dataService.getValues().subscribe((data) => {
+    this.dataService.getNumVisitors().subscribe((data) => {
       // Use the injected service
       console.log(data);
       this.totViews = data;

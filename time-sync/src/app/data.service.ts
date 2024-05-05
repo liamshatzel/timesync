@@ -6,11 +6,17 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class DataService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  getValues(): Observable<any> {
-    return this.http.get('https://localhost:3000/num-visitors');
+  getNumVisitors(): Observable<any> {
+    return this.http.get('https://localhost:5000/num-visitors');
   }
 
+  getMaxTime(): Observable<any> {
+    return this.http.get('https://localhost:5000/max-time');
+  }
+
+  postTime(time: number): Observable<any> {
+    return this.http.post('https://localhost:5000/time', { time });
+  }
 }
