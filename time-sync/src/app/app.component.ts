@@ -20,6 +20,7 @@ export class AppComponent {
   );
   totViews = 0;
   time = 0;
+  maxTime = 0;
   constructor(private dataService: DataService) {} // Inject DataService instead of HttpClient
   fetchData() {
     this.dataService.getNumVisitors().subscribe((data) => {
@@ -27,9 +28,13 @@ export class AppComponent {
       console.log(data);
       this.totViews = data;
     });
+
+    this.dataService.getMaxTime().subscribe((data) => {
+      // Use the injected service
+      console.log(data);
+      this.maxTime = data;
+    });
   }
-
-
 
   ngOnInit() {
     this.fetchData();
@@ -44,10 +49,9 @@ export class AppComponent {
     window.removeEventListener('beforeunload', this.sendTimeToBackend);
   }
 
-
   sendTimeToBackend() {
     // Send the time to the backend
-    const payload = { time: this.time };
+    const payload = { "time": this.time };
 
     this.dataService.sendTime(payload).subscribe({
       complete: () => console.log('Time sent successfully'),
